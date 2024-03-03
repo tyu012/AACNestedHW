@@ -39,7 +39,7 @@ public class AAC implements ActionListener {
 	private static final int NUM_ACROSS = 3;
 	private static final int NUM_DOWN = 3;
 	private String[] images;
-	private AACPage page;
+	private AACMappings page;
 	private Scanner input;
 
 	/**
