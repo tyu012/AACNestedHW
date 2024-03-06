@@ -166,6 +166,22 @@ public class AssociativeArray<K, V> {
     return this.size;
   } // size()
 
+  /**
+   * Returns an array of all the keys in this associative array.
+   */
+  @SuppressWarnings({ "unchecked" })
+  public K[] keys() {
+    if (size > 0) {
+      K[] keysArray = (K[]) newInstance(pairs[0].key.getClass(), size());
+      for (int i = 0; i < size(); i++) {
+        keysArray[i] = pairs[i].key;
+      }
+      return keys();
+    } else {
+      return (K[]) new Object[] {};
+    }
+  }
+
   // +-----------------+---------------------------------------------
   // | Private Methods |
   // +-----------------+
