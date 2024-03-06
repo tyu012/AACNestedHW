@@ -1,18 +1,28 @@
+import structures.AssociativeArray;
+
+/**
+ * A mapping between image location strings and image description strings,
+ * implemented using an associative array.
+ * 
+ * @author Tim Yu
+ */
 public class AACCategory {
   String name;
+  private AssociativeArray<String, String> imageMappings;
 
   /**
    * Creates a new empty category with the given name
    */
   public AACCategory(String name) {
     this.name = name;
+    this.imageMappings = new AssociativeArray<String, String>();
   }
 
   /**
    * Adds the mapping of the imageLoc to the text to the category.
    */
   public void addItem(String imageLoc, String text) {
-    return; // STUB
+    return;
   }
 
   /**
