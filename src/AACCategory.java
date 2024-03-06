@@ -63,6 +63,6 @@ public class AACCategory {
    * Return an array of all the images in the category
    */
   public String[] getImages() {
-    return new String[]{}; // STUB
+    return imageMappings.keys();
   }
 }
