@@ -176,7 +176,7 @@ public class AssociativeArray<K, V> {
       for (int i = 0; i < size(); i++) {
         keysArray[i] = pairs[i].key;
       }
-      return keys();
+      return keysArray;
     } else {
       return (K[]) new Object[] {};
     }
