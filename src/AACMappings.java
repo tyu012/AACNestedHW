@@ -1,6 +1,43 @@
-public class AACMappings {
-  public AACMappings(String filename) {
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.util.Scanner;
+import structures.AssociativeArray;
+import structures.KeyNotFoundException;
+import structures.NullKeyException;
 
+public class AACMappings {
+  private AssociativeArray<String, AACCategory> categories;
+  private PrintWriter err;
+  private String currentCategory;
+
+  public AACMappings(String filename) {
+    this.err = new PrintWriter(System.err, true);
+    this.categories = new AssociativeArray<String, AACCategory>();
+    this.currentCategory = "";
+
+    // Open file
+    File f = new File(filename);
+
+    try {
+      Scanner fileScanner = new Scanner(f);
+
+      // Parse file line-by-line
+      while (fileScanner.hasNextLine()) {
+        String line = fileScanner.nextLine();
+        if (line.startsWith(">")) {
+          parseImageMapping(line);
+        } else {
+          currentCategory = parseAacCategory(line);
+        }
+      }
+      
+      // Close scanner
+      fileScanner.close();
+    } catch (FileNotFoundException e) {
+      err.println(e.getMessage());
+    }
+    reset();
   }
 
   /**
@@ -9,35 +46,59 @@ public class AACMappings {
    * to be the category associated with that image
    */
   public String getText(String imageLoc) {
-    return ""; // STUB
+    if (isCategory(imageLoc)) {
+      currentCategory = imageLoc;
+      try {
+        return categories.get(currentCategory).name;
+      } catch (KeyNotFoundException e) {
+        err.println("getText category:" + e.getMessage());
+        return "";
+      }
+    } else {
+      try {
+        return categories.get(currentCategory).getText(imageLoc);
+      } catch (KeyNotFoundException e) {
+        err.println("getText image:" + e.getMessage());
+        return "";
+      }
+    }
   }
 
   /**
    * Provides an array of all the images in the current category
    */
   public String[] getImageLocs() {
-    return new String[] { "" }; // STUB
+    if (currentCategory.equals("")) {
+      return this.categories.keys();
+    } else {
+      try {
+        return this.categories.get(currentCategory).getImages();
+      } catch (KeyNotFoundException e) {
+        err.println("getImageLocs:" + e.getMessage());
+        return new String[] {};
+      }
+    }
   }
 
   /**
    * Resets the current category of the AAC back to the default category
    */
   public void reset() {
-    return; // STUB
+    currentCategory = "";
   }
 
   /**
    * Gets the current category
    */
   public String getCurrentCategory() {
-    return ""; // STUB
+    return currentCategory;
   }
 
   /**
    * Determines if the image represents a category or text to speak
    */
   public boolean isCategory(String imageLoc) {
-    return false; // STUB
+    return categories.hasKey(imageLoc);
   }
 
   /**
@@ -55,6 +116,54 @@ public class AACMappings {
    * is the current category)
    */
   public void add(String imageLoc, String text) {
-    return; // STUB
+    try {
+      categories.get(getCurrentCategory()).addItem(imageLoc, text);
+    } catch (KeyNotFoundException e) {
+      err.println("add:" + e.getMessage());
+    }
+  }
+
+  // +-----------------+
+  // | Private methods |
+  // +-----------------+
+
+  /**
+   * Reads a line representing a new AACCategory.
+   * Adds the image path and new AACCategory to the categories associative array.
+   * Returns the image path of this AACCategory, or empty string for null input.
+   * 
+   * @pre `categories` must be initialized
+   * @pre `line` must follow the format "[path] [category name]"
+   *  (category name may contain spaces)
+   */
+  private String parseAacCategory(String line) {
+    String[] pair = line.split(" ", 2);
+
+    String path = pair[0];
+    String categoryName = pair[1];
+
+    try {
+      categories.set(path, new AACCategory(categoryName));
+      return path;
+    } catch (NullKeyException e) {
+      err.println(e.getMessage());
+      return "";
+    }
+  }
+
+  /** 
+   * Reads a line representing a mapping from an image to a spoken text.
+   * Adds this mapping to the current AACCategory.
+   * 
+   * @pre `line` must follow the format ">[path] [image text]"
+   *  (image text may contain spaces)
+   */
+  private void parseImageMapping(String line) {
+    String[] pair = line.substring(1).split(" ", 2);
+
+    String imagePath = pair[0];
+    String imageText = pair[1];
+
+    add(imagePath, imageText);
   }
 }
