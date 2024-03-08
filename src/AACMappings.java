@@ -108,7 +108,22 @@ public class AACMappings {
    * name and text of that image.
    */
   public void writeToFile(String filename) {
-    return; // STUB
+    File f = new File(filename);
+
+    try {
+      PrintWriter fpw = new PrintWriter(f);
+      String[] categoryImages = categories.keys();
+
+      for (String img : categoryImages) {
+        writeAacCategory(img, categories.get(img), fpw);
+      }
+
+      fpw.close();
+    } catch (FileNotFoundException e) {
+      err.println("write to file: cannot write to file:" + e.getMessage());
+    } catch (KeyNotFoundException e) {
+      err.println("write to file: key not found:" + e.getMessage());
+    }
   }
 
   /**
@@ -116,10 +131,18 @@ public class AACMappings {
    * is the current category)
    */
   public void add(String imageLoc, String text) {
-    try {
-      categories.get(getCurrentCategory()).addItem(imageLoc, text);
-    } catch (KeyNotFoundException e) {
-      err.println("add:" + e.getMessage());
+    if (getCurrentCategory().equals("")) {
+      try {
+        this.categories.set(imageLoc, new AACCategory(text));
+      } catch (NullKeyException e) {
+        err.println("add category:" + e.getMessage());
+      }
+    } else {
+      try {
+        categories.get(getCurrentCategory()).addItem(imageLoc, text);
+      } catch (KeyNotFoundException e) {
+        err.println("add:" + e.getMessage());
+      }
     }
   }
 
@@ -165,5 +188,19 @@ public class AACMappings {
     String imageText = pair[1];
 
     add(imagePath, imageText);
+  }
+
+  /**
+   * Writes the path of the image and name of an AACCategory, followed by the
+   * contents of this AACCategory using a PrintWriter in a format readable by
+   * the constructor of this class.
+   */
+  private void writeAacCategory(String imagePath, AACCategory cat, PrintWriter pen) {
+    pen.println(imagePath + " " + cat.name);
+
+    String[] paths = cat.getImages();
+    for (String path : paths) {
+      pen.println(">" + path + " " + cat.getText(path));
+    }
   }
 }
