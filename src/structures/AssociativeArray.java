@@ -168,9 +168,11 @@ public class AssociativeArray<K, V> {
 
   /**
    * Returns an array of all the keys in this associative array.
+   * 
+   * @throws KeyNotFoundException if this associative array is empty.
    */
   @SuppressWarnings({ "unchecked" })
-  public K[] keys() {
+  public K[] keys() throws KeyNotFoundException {
     if (size > 0) {
       K[] keysArray = (K[]) newInstance(pairs[0].key.getClass(), size());
       for (int i = 0; i < size(); i++) {
@@ -178,7 +180,8 @@ public class AssociativeArray<K, V> {
       }
       return keysArray;
     } else {
-      return (K[]) new Object[] {};
+      // Workaround for the need to retrieve class of key when array is empty.
+      throw new KeyNotFoundException("This associative array is empty");
     }
   }
 

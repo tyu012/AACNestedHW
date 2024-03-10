@@ -6,11 +6,21 @@ import structures.AssociativeArray;
 import structures.KeyNotFoundException;
 import structures.NullKeyException;
 
+/**
+ * A mapping between strings and AACCategory objects, combined with tracking of
+ * current category for a frontend and file IO for long-term data storage and
+ * retrieval.
+ * 
+ * @author Tim Yu
+ */
 public class AACMappings {
   private AssociativeArray<String, AACCategory> categories;
   private PrintWriter err;
   private String currentCategory;
 
+  /**
+   * Constructs an AACMappings object based on given filename
+   */
   public AACMappings(String filename) {
     this.err = new PrintWriter(System.err, true);
     this.categories = new AssociativeArray<String, AACCategory>();
@@ -68,15 +78,14 @@ public class AACMappings {
    * Provides an array of all the images in the current category
    */
   public String[] getImageLocs() {
-    if (currentCategory.equals("")) {
-      return this.categories.keys();
-    } else {
-      try {
+    try {
+      if (currentCategory.equals("")) {
+        return this.categories.keys();
+      } else {
         return this.categories.get(currentCategory).getImages();
-      } catch (KeyNotFoundException e) {
-        err.println("getImageLocs:" + e.getMessage());
-        return new String[] {};
       }
+    } catch (KeyNotFoundException e) {
+      return new String[] {};
     }
   }
 
