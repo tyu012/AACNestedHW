@@ -16,3 +16,6 @@ Mini-Project 5 specifications
 
 Java® Platform, Standard Edition & Java Development Kit Version 17 API Specification
 > https://docs.oracle.com/en/java/javase/17/docs/api/index.html
+
+Removing specified files in `.gitignore` after they have been added to repo
+> https://gist.github.com/jeffjohnson9046/80bc182db7ae2f4a6150
