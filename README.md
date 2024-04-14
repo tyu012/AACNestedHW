@@ -1,6 +1,11 @@
 # Mini-Project 5: Augmentive and Alternative Communication Devices
 https://github.com/tyu012/AACNestedHW
 
+## Changelog
+4/14/24 (first resubmission):
+* Now uses `==` instead of `.equals` to determine if object is null.
+* Will resubmit through GitHub repository instead of selecting files.
+
 ## Author
 Tim Yu
 
