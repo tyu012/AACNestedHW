@@ -2,9 +2,10 @@
 https://github.com/tyu012/AACNestedHW
 
 ## Changelog
-4/14/24 (first resubmission):
+4/14/24 -- 4/21/24 (first resubmission):
 * Now uses `==` instead of `.equals` to determine if object is null.
 * Will resubmit through GitHub repository instead of selecting files.
+* Added AACMappings.txt to repo
 
 ## Author
 Tim Yu
