@@ -1,5 +1,3 @@
 *.class
 img/extra
-AACMappings.txt*
-AACMappings*.txt
 .DS_STORE
